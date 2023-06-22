@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -32,20 +33,25 @@ namespace EmployeeManagementWebApp
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-            }
+            //else
+            //{
+            //    app.UseExceptionHandler("/Error");
+            //}
 
-            app.UseStaticFiles();
+            //app.UseStaticFiles();
 
-            app.UseRouting();
+            //app.UseRouting();
 
-            app.UseAuthorization();
+            //app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapRazorPages();
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapRazorPages();
+            //});
+
+            app.Run(async (context) => {
+                //await context.Response.WriteAsync("Hello World");
+                await context.Response.WriteAsync(System.Diagnostics.Process.GetCurrentProcess().ProcessName);
             });
         }
     }
