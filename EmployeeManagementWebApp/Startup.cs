@@ -51,9 +51,9 @@ namespace EmployeeManagementWebApp
             //});
 
             app.Run(async (context) => {
-                //await context.Response.WriteAsync("Hello World");
-                //await context.Response.WriteAsync(System.Diagnostics.Process.GetCurrentProcess().ProcessName);
-                await context.Response.WriteAsync(_configuration["MyKey"]);
+                await context.Response.WriteAsync("Hello World!");
+                //await context.Response.WriteAsync(System.Diagnostics.Process.GetCurrentProcess().ProcessName);    //to get the server process name the application is running upon
+                //await context.Response.WriteAsync(_configuration["MyKey"]);   //to get the value from configuration file
             });
         }
     }
