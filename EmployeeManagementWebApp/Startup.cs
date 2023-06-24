@@ -49,12 +49,7 @@ namespace EmployeeManagementWebApp
                 await next();
                 logger.LogInformation("MW2 : Outgoing Response");
             });
-
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello World!");
-            });
-
+            
             app.Run(async (context) => {
                 
                 await context.Response.WriteAsync("Hello World from 3rd Middleware");
