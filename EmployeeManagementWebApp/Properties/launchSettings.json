@@ -13,6 +13,8 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
+        //  ,
+        //"MyKey": "Value of MyKey from Environment Variable"
       }
     },
     "EmployeeManagementWebApp": {

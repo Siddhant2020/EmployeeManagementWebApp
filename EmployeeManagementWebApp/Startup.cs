@@ -13,12 +13,13 @@ namespace EmployeeManagementWebApp
 {
     public class Startup
     {
+        //Constructor injection to inject IConfiguration service
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        public IConfiguration _configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -51,7 +52,8 @@ namespace EmployeeManagementWebApp
 
             app.Run(async (context) => {
                 //await context.Response.WriteAsync("Hello World");
-                await context.Response.WriteAsync(System.Diagnostics.Process.GetCurrentProcess().ProcessName);
+                //await context.Response.WriteAsync(System.Diagnostics.Process.GetCurrentProcess().ProcessName);
+                await context.Response.WriteAsync(_configuration["MyKey"]);
             });
         }
     }
