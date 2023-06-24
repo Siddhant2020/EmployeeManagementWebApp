@@ -36,27 +36,43 @@ namespace EmployeeManagementWebApp
                 app.UseDeveloperExceptionPage();
             }
             
-            app.Use(async (context, next) => {
-                logger.LogInformation("MW1 : Incoming Request");
-                //await context.Response.WriteAsync("Hello World from 1st Middleware \n");
-                await next();
-                logger.LogInformation("MW1 : Outgoing Response");
+            //DefaultFilesOptions defaultFilesOptions = new DefaultFilesOptions();
+            //defaultFilesOptions.DefaultFileNames.Clear();
+            //defaultFilesOptions.DefaultFileNames.Add("foo.html");
+            //app.UseDefaultFiles(defaultFilesOptions);
+            //app.UseStaticFiles();
+
+            FileServerOptions fileServerOptions = new FileServerOptions();
+            fileServerOptions.DefaultFilesOptions.DefaultFileNames.Clear();
+            fileServerOptions.DefaultFilesOptions.DefaultFileNames.Add("foo.html");
+            app.UseFileServer(fileServerOptions);
+
+            app.Run(async (context) =>
+            {
+                await context.Response.WriteAsync("Hello World!");
             });
 
-            app.Use(async (context, next) => {
-                logger.LogInformation("MW2 : Incoming Request");
-                //await context.Response.WriteAsync("Hello World from 1st Middleware \n");
-                await next();
-                logger.LogInformation("MW2 : Outgoing Response");
-            });
+            //app.Use(async (context, next) => {
+            //    logger.LogInformation("MW1 : Incoming Request");
+            //    //await context.Response.WriteAsync("Hello World from 1st Middleware \n");
+            //    await next();
+            //    logger.LogInformation("MW1 : Outgoing Response");
+            //});
+
+            //app.Use(async (context, next) => {
+            //    logger.LogInformation("MW2 : Incoming Request");
+            //    //await context.Response.WriteAsync("Hello World from 1st Middleware \n");
+            //    await next();
+            //    logger.LogInformation("MW2 : Outgoing Response");
+            //});
             
-            app.Run(async (context) => {
+            //app.Run(async (context) => {
                 
-                await context.Response.WriteAsync("Hello World from 3rd Middleware");
-                logger.LogInformation("MW3: Request handled and response produced");
-                //await context.Response.WriteAsync(System.Diagnostics.Process.GetCurrentProcess().ProcessName);    //to get the server process name the application is running upon
-                //await context.Response.WriteAsync(_configuration["MyKey"]);   //to get the value from configuration file
-            });
+            //    await context.Response.WriteAsync("Hello World from 3rd Middleware");
+            //    logger.LogInformation("MW3: Request handled and response produced");
+            //    //await context.Response.WriteAsync(System.Diagnostics.Process.GetCurrentProcess().ProcessName);    //to get the server process name the application is running upon
+            //    //await context.Response.WriteAsync(_configuration["MyKey"]);   //to get the value from configuration file
+            //});
         }
     }
 }
