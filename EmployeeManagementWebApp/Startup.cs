@@ -31,31 +31,38 @@ namespace EmployeeManagementWebApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
+            //if (env.IsEnvironment("UAT")) // check for the custom created Environment
             if (env.IsDevelopment())
             {
-                DeveloperExceptionPageOptions developerExceptionPageOptions = new DeveloperExceptionPageOptions
-                {
-                    SourceCodeLineCount = 1,
-                };
-                app.UseDeveloperExceptionPage(developerExceptionPageOptions);
+                //DeveloperExceptionPageOptions developerExceptionPageOptions = new DeveloperExceptionPageOptions
+                //{
+                //    SourceCodeLineCount = 1,
+                //};
+                //app.UseDeveloperExceptionPage(developerExceptionPageOptions);
+                app.UseDeveloperExceptionPage();
             }
+            //else if (env.IsStaging() || env.IsProduction() || env.IsEnvironment("UAT"))
+            //{
+            //    app.UseExceptionHandler("/Error");
+            //}
 
-            DefaultFilesOptions defaultFilesOptions = new DefaultFilesOptions();
-            defaultFilesOptions.DefaultFileNames.Clear();
-            defaultFilesOptions.DefaultFileNames.Add("foo.html");
-            app.UseDefaultFiles(defaultFilesOptions);
-            app.UseStaticFiles();
+            //DefaultFilesOptions defaultFilesOptions = new DefaultFilesOptions();
+            //defaultFilesOptions.DefaultFileNames.Clear();
+            //defaultFilesOptions.DefaultFileNames.Add("foo.html");
+            //app.UseDefaultFiles(defaultFilesOptions);
+            //app.UseStaticFiles();
 
             //FileServerOptions fileServerOptions = new FileServerOptions();
             //fileServerOptions.DefaultFilesOptions.DefaultFileNames.Clear();
             //fileServerOptions.DefaultFilesOptions.DefaultFileNames.Add("foo.html");
             //app.UseFileServer(fileServerOptions);
-            app.UseFileServer();
+
 
             app.Run(async (context) =>
             {
-                throw new Exception("Some error occured processing the request");
-                await context.Response.WriteAsync("Hello World!");
+                //throw new Exception("Some error occured processing the request");
+                //await context.Response.WriteAsync("Hello World!");
+                await context.Response.WriteAsync("Hosting Environment : " + env.EnvironmentName);
             });
 
 
