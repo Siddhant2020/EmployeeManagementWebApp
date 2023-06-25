@@ -33,24 +33,31 @@ namespace EmployeeManagementWebApp
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                DeveloperExceptionPageOptions developerExceptionPageOptions = new DeveloperExceptionPageOptions
+                {
+                    SourceCodeLineCount = 1,
+                };
+                app.UseDeveloperExceptionPage(developerExceptionPageOptions);
             }
-            
-            //DefaultFilesOptions defaultFilesOptions = new DefaultFilesOptions();
-            //defaultFilesOptions.DefaultFileNames.Clear();
-            //defaultFilesOptions.DefaultFileNames.Add("foo.html");
-            //app.UseDefaultFiles(defaultFilesOptions);
-            //app.UseStaticFiles();
 
-            FileServerOptions fileServerOptions = new FileServerOptions();
-            fileServerOptions.DefaultFilesOptions.DefaultFileNames.Clear();
-            fileServerOptions.DefaultFilesOptions.DefaultFileNames.Add("foo.html");
-            app.UseFileServer(fileServerOptions);
+            DefaultFilesOptions defaultFilesOptions = new DefaultFilesOptions();
+            defaultFilesOptions.DefaultFileNames.Clear();
+            defaultFilesOptions.DefaultFileNames.Add("foo.html");
+            app.UseDefaultFiles(defaultFilesOptions);
+            app.UseStaticFiles();
+
+            //FileServerOptions fileServerOptions = new FileServerOptions();
+            //fileServerOptions.DefaultFilesOptions.DefaultFileNames.Clear();
+            //fileServerOptions.DefaultFilesOptions.DefaultFileNames.Add("foo.html");
+            //app.UseFileServer(fileServerOptions);
+            app.UseFileServer();
 
             app.Run(async (context) =>
             {
+                throw new Exception("Some error occured processing the request");
                 await context.Response.WriteAsync("Hello World!");
             });
+
 
             //app.Use(async (context, next) => {
             //    logger.LogInformation("MW1 : Incoming Request");
@@ -65,9 +72,9 @@ namespace EmployeeManagementWebApp
             //    await next();
             //    logger.LogInformation("MW2 : Outgoing Response");
             //});
-            
+
             //app.Run(async (context) => {
-                
+
             //    await context.Response.WriteAsync("Hello World from 3rd Middleware");
             //    logger.LogInformation("MW3: Request handled and response produced");
             //    //await context.Response.WriteAsync(System.Diagnostics.Process.GetCurrentProcess().ProcessName);    //to get the server process name the application is running upon
