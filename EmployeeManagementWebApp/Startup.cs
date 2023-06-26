@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,6 +27,8 @@ namespace EmployeeManagementWebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+            MvcOptions options = new MvcOptions();
+            options.EnableEndpointRouting = false;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,13 +60,14 @@ namespace EmployeeManagementWebApp
             //fileServerOptions.DefaultFilesOptions.DefaultFileNames.Add("foo.html");
             //app.UseFileServer(fileServerOptions);
 
+            app.UseMvc();
 
-            app.Run(async (context) =>
-            {
-                //throw new Exception("Some error occured processing the request");
-                //await context.Response.WriteAsync("Hello World!");
-                await context.Response.WriteAsync("Hosting Environment : " + env.EnvironmentName);
-            });
+            //app.Run(async (context) =>
+            //{
+            //    //throw new Exception("Some error occured processing the request");
+            //    //await context.Response.WriteAsync("Hello World!");
+            //    await context.Response.WriteAsync("Hosting Environment : " + env.EnvironmentName);
+            //});
 
 
             //app.Use(async (context, next) => {
