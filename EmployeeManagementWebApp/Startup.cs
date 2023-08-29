@@ -56,7 +56,7 @@ namespace EmployeeManagementWebApp
             //defaultFilesOptions.DefaultFileNames.Clear();
             //defaultFilesOptions.DefaultFileNames.Add("foo.html"); //set foo.html as default page
             //app.UseDefaultFiles(defaultFilesOptions); //UseDefaultFiles Middleware is used to set any default web page apart from the conventional approach(i.e. default.html, default.htm) by using the DefaultFilesOptions object
-            //app.UseStaticFiles(); //To serve static files UseStaticFiles middleware is required, files which is placed inside wwwroot folder
+            app.UseStaticFiles(); //To serve static files UseStaticFiles middleware is required, files which is placed inside wwwroot folder
 
             //FileServer Middleware is the replacement of both UseDefaultFiles, UseStaticFiles Middlewares
             //FileServerOptions fileServerOptions = new FileServerOptions();
