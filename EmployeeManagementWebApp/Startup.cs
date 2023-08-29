@@ -1,3 +1,4 @@
+using EmployeeManagementWebApp.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -28,6 +29,7 @@ namespace EmployeeManagementWebApp
         public void ConfigureServices(IServiceCollection services)
         {
             IMvcBuilder mvcBuilder = services.AddMvc( options => options.EnableEndpointRouting = false );
+            services.AddSingleton<IEmployeeRepository, MockEmployeeRepository>();
             //services.AddRazorPages();
             //MvcOptions options = new MvcOptions();
             //options.EnableEndpointRouting = false;
