@@ -28,7 +28,7 @@ namespace EmployeeManagementWebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            IMvcBuilder mvcBuilder = services.AddMvc( options => options.EnableEndpointRouting = false );
+            IMvcBuilder mvcBuilder = services.AddMvc( options => options.EnableEndpointRouting = false ).AddXmlSerializerFormatters();
             services.AddSingleton<IEmployeeRepository, MockEmployeeRepository>();
             //services.AddRazorPages();
             //MvcOptions options = new MvcOptions();
