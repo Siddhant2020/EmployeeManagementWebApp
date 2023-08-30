@@ -17,12 +17,12 @@ namespace EmployeeManagementWebApp.Controllers
             return _employeeRepository.GetEmployee(1).Name;
         }
 
-        public JsonResult Details(int id)
+        public ViewResult Details(int id)
         {
             Employee model = _employeeRepository.GetEmployee(id);
-            return Json(model);
-        }
+            return View(model);
 
+        }
         //public JsonResult Index()
         //{
         //    //return View();
