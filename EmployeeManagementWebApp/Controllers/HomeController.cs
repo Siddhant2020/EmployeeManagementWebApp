@@ -20,7 +20,10 @@ namespace EmployeeManagementWebApp.Controllers
         public ViewResult Details(int id)
         {
             Employee model = _employeeRepository.GetEmployee(id);
-            return View(model);
+            return View(model);    // passing the model
+            //return View("Test");    // passing the view name
+            //return View("../Test/Update.cshtml");    // passing the view name with relative path
+            //return View("~/MyViews/Test.cshtml");    // passing the view name with absolute path
 
         }
         //public JsonResult Index()
