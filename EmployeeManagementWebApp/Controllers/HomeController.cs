@@ -17,10 +17,14 @@ namespace EmployeeManagementWebApp.Controllers
             return _employeeRepository.GetEmployee(1).Name;
         }
 
-        public ViewResult Details(int id)
+        public ViewResult Details(int id = 1)
         {
             Employee model = _employeeRepository.GetEmployee(id);
-            return View(model);    // passing the model
+            ViewData["Employee"] = model;
+            ViewData["PageTitle"] = "Employee Details";
+            return View();
+
+            //return View(model);    // passing the model
             //return View("Test");    // passing the view name
             //return View("../Test/Update.cshtml");    // passing the view name with relative path
             //return View("~/MyViews/Test.cshtml");    // passing the view name with absolute path
