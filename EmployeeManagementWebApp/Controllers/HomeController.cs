@@ -20,9 +20,8 @@ namespace EmployeeManagementWebApp.Controllers
         public ViewResult Details(int id = 1)
         {
             Employee model = _employeeRepository.GetEmployee(id);
-            ViewBag.Employee = model;
             ViewBag.PageTitle = "Emplyee Details";
-            return View();
+            return View(model);
         }
 
     }
