@@ -28,7 +28,7 @@ namespace EmployeeManagementWebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            IMvcBuilder mvcBuilder = services.AddMvc( options => options.EnableEndpointRouting = false ).AddXmlSerializerFormatters();
+            IMvcBuilder mvcBuilder = services.AddMvc(options => options.EnableEndpointRouting = false).AddXmlSerializerFormatters();
             services.AddSingleton<IEmployeeRepository, MockEmployeeRepository>();
             //services.AddRazorPages();
             //MvcOptions options = new MvcOptions();
@@ -66,7 +66,11 @@ namespace EmployeeManagementWebApp
             //fileServerOptions.DefaultFilesOptions.DefaultFileNames.Add("foo.html");
             //app.UseFileServer(fileServerOptions);
 
-            app.UseMvcWithDefaultRoute();
+            //app.UseMvcWithDefaultRoute(); //this sets up the default conventional routing
+            app.UseMvc(routeBuilder =>
+            {
+                routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+            });
 
             //app.Run(async (context) =>
             //{
