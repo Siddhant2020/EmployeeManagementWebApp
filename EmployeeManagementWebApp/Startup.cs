@@ -67,10 +67,11 @@ namespace EmployeeManagementWebApp
             //app.UseFileServer(fileServerOptions);
 
             //app.UseMvcWithDefaultRoute(); //this sets up the default conventional routing
-            app.UseMvc(routeBuilder =>
-            {
-                routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
-            });
+            //app.UseMvc(routeBuilder =>
+            //{
+            //    routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+            //});
+            app.UseMvc();
 
             //app.Run(async (context) =>
             //{
