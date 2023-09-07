@@ -7,8 +7,4 @@
 		<!-- With Inprocess hosting, launch.settings has IISExpress profile set to run application on single server, which is faster and do not add on the penalty-->
 	</PropertyGroup>
 
-	<ItemGroup>
-	  <Folder Include="wwwroot\css\" />
-	</ItemGroup>
-
 </Project>

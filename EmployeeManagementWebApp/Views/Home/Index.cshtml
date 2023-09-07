@@ -4,7 +4,24 @@
     ViewBag.Title = "Employee List";
 }
 
-        <table>
+<div class="card-deck">
+    @foreach (var employee in Model)
+    {
+        <div class="card m-3">
+            <div class="cardcard-header">
+                <h3>@employee.Name</h3>
+            </div>
+            <img class="card-img-top" src="~/images/noimage.webp"/>
+            <div class="card-footer text-center">
+                <a href="#" class="btn btn-primary">View</a>
+                <a href="#" class="btn btn-primary">Edit</a>
+                <a href="#" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    }
+</div>
+
+       @* <table>
             <thead>
                 <tr>
                     <th>ID</th>
@@ -22,4 +39,4 @@
                     </tr>
                 }
             </tbody>
-        </table>
+        </table>*@
