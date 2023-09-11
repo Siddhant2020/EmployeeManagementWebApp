@@ -8,19 +8,19 @@
 
 <div class="row justify-content-center m-3">
     <div class="col-sm-8">
-        <div class="card-header">
+        <div class="card-header"  style="background-color:azure">
             <h1>@Model.Employee.Name</h1>
         </div>
 
-        <div class="card-body text-center">
+        <div class="card-body text-center"  style="background-color:azure">
             <img class="card-img-top" src="~/images/noimage.webp"/>
 
             <h4>Employee ID : @Model.Employee.Id</h4>
             <h4>Email : @Model.Employee.Email</h4>
             <h4>Department : @Model.Employee.Department</h4>
         </div>
-        <div class="card-footer text-center">
-            <a href="#" class="btn btn-primary">Back</a>
+        <div class="card-footer text-center"  style="background-color:azure">
+            <a asp-controller="home" asp-action="index" class="btn btn-primary">Back</a>
             <a href="#" class="btn btn-primary">Edit</a>
             <a href="#" class="btn btn-danger">Delete</a>
         </div>
