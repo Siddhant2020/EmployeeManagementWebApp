@@ -69,7 +69,7 @@ namespace EmployeeManagementWebApp
             //app.UseMvcWithDefaultRoute(); //this sets up the default conventional routing
             app.UseMvc(routeBuilder =>
             {
-                routeBuilder.MapRoute("default", "portal/{controller=Home}/{action=Index}/{id?}");
+                routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
             //app.UseMvc();
 

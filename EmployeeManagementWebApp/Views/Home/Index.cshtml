@@ -11,11 +11,11 @@
             <div class="cardcard-header">
                 <h3>@employee.Name</h3>
             </div>
-            <img class="card-img-top" src="~/images/noimage.webp"/>
+            <img class="card-img-top" src="~/images/noimage.webp" asp-append-version="true"/>
             <div class="card-footer text-center">
                 @*<a href="@Url.Action("details", "home", new { id = employee.Id})" class="btn btn-primary">View</a>*@
                 @*@Html.ActionLink("View", "details", "home", new { id = employee.Id})*@
-                <a href="/home/details/@employee.Id" class="btn btn-primary">View</a>
+                @* <a href="/home/details/@employee.Id" class="btn btn-primary">View</a> *@
                 <a asp-controller="home" asp-action="details" asp-route-id="@employee.Id" class="btn btn-primary">View</a>
                 <a href="#" class="btn btn-primary">Edit</a>
                 <a href="#" class="btn btn-danger">Delete</a>
