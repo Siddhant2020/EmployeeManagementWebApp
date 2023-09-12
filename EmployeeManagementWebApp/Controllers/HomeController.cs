@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeManagementWebApp.Controllers
 {
-    [Route("[controller]")]
+    //[Route("[controller]")]
     public class HomeController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;
@@ -14,9 +14,9 @@ namespace EmployeeManagementWebApp.Controllers
             _employeeRepository = employeeRepository;
         }
 
-        [Route("~/")]   //Map via Attribute Routing when url just contains the domain name http://localhost:38315/ or http://localhost:38315
-        [Route("")] //Map via Attribute Routing when url contains just the controller name http://localhost:38315/home or http://localhost:38315/home/
-        [Route("[action]")]    //Map via Attribute Routing when url contains the controller name and the action method as well http://localhost:38315/home/index
+        //[Route("~/")]   //Map via Attribute Routing when url just contains the domain name http://localhost:38315/ or http://localhost:38315
+        //[Route("")] //Map via Attribute Routing when url contains just the controller name http://localhost:38315/home or http://localhost:38315/home/
+        //[Route("[action]")]    //Map via Attribute Routing when url contains the controller name and the action method as well http://localhost:38315/home/index
         public ViewResult Index()
         {
             var model = _employeeRepository.GetAllEmployee();
@@ -29,7 +29,7 @@ namespace EmployeeManagementWebApp.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [Route("[action]/{id?}")]   
+        //[Route("[action]/{id?}")]   
         public ViewResult Details(int id = 1)
         {
             HomeDetailsViewModel homeDetailsViewModel = new HomeDetailsViewModel()
