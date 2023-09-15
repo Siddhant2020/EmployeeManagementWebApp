@@ -30,19 +30,27 @@ namespace EmployeeManagementWebApp.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         //[Route("[action]/{id?}")]   
-        public ViewResult Details(int id = 1)
+        public ViewResult Details(int? id = 1)
         {
             HomeDetailsViewModel homeDetailsViewModel = new HomeDetailsViewModel()
             {
-                Employee = _employeeRepository.GetEmployee(id),
+                Employee = _employeeRepository.GetEmployee(id ?? 1),
                 PageTitle = "Emplyee Details"
             };
             return View(homeDetailsViewModel);
         }
 
+        [HttpGet]
         public ViewResult Create()
         {
             return View();
+        }
+
+        [HttpPost]
+        public RedirectToActionResult Create(Employee employee)
+        {
+            Employee newEmployee = _employeeRepository.Add(employee);
+            return RedirectToAction("details", new { id = newEmployee.Id }) ;
         }
     }
 }

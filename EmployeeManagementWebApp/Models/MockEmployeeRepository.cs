@@ -26,5 +26,12 @@ namespace EmployeeManagementWebApp.Models
         {
             return _employeeList.FirstOrDefault(emp => emp.Id == id);
         }
+
+        public Employee Add(Employee employee)
+        {
+            employee.Id = _employeeList.Max(emp => emp.Id) + 1;
+            _employeeList.Add(employee);
+            return employee;
+        }
     }
 }
