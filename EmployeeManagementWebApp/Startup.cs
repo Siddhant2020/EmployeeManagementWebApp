@@ -29,7 +29,7 @@ namespace EmployeeManagementWebApp
         public void ConfigureServices(IServiceCollection services)
         {
             IMvcBuilder mvcBuilder = services.AddMvc(options => options.EnableEndpointRouting = false).AddXmlSerializerFormatters();
-            services.AddTransient<IEmployeeRepository, MockEmployeeRepository>();
+            services.AddSingleton<IEmployeeRepository, MockEmployeeRepository>();
             //services.AddRazorPages();
             //MvcOptions options = new MvcOptions();
             //options.EnableEndpointRouting = false;
