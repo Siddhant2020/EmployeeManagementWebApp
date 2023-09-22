@@ -34,7 +34,7 @@ namespace EmployeeManagementWebApp
                 dbOptions =>dbOptions.UseSqlServer(_configuration.GetConnectionString("EmployeeDBConnection")));
             
             IMvcBuilder mvcBuilder = services.AddMvc(options => options.EnableEndpointRouting = false).AddXmlSerializerFormatters();
-            services.AddSingleton<IEmployeeRepository, MockEmployeeRepository>();
+            services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
             //services.AddRazorPages();
             //MvcOptions options = new MvcOptions();
             //options.EnableEndpointRouting = false;
