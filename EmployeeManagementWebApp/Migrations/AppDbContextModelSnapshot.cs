@@ -36,6 +36,11 @@ namespace EmployeeManagementWebApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Employees");
+
+                    b.HasData(
+                        new { Id = 1, Department = 2, Email = "mark@gmail.com", Name = "Mark" },
+                        new { Id = 2, Department = 1, Email = "john@gmail.com", Name = "John" }
+                    );
                 });
 #pragma warning restore 612, 618
         }
