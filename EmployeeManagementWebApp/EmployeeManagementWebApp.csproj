@@ -8,6 +8,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Migrations\20230925014648_AddPhotoPathCOlumn.cs" />
+	  <Compile Remove="Migrations\20230925014648_AddPhotoPathCOlumn.Designer.cs" />
+	  <Compile Remove="Migrations\20230925014859_AddSomeProperty.cs" />
+	  <Compile Remove="Migrations\20230925014859_AddSomeProperty.Designer.cs" />
+	  <Compile Remove="Migrations\20230925015215_AddPhotoPatColumn.cs" />
+	  <Compile Remove="Migrations\20230925015215_AddPhotoPatColumn.Designer.cs" />
+	  <Compile Remove="Migrations\20230925015433_AddSomeProperty.cs" />
+	  <Compile Remove="Migrations\20230925015433_AddSomeProperty.Designer.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.14" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.14" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.14">

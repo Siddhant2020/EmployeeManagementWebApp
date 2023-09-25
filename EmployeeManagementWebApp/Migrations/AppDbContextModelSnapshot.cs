@@ -33,6 +33,8 @@ namespace EmployeeManagementWebApp.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
+                    b.Property<string>("PhotoPath");
+
                     b.HasKey("Id");
 
                     b.ToTable("Employees");
