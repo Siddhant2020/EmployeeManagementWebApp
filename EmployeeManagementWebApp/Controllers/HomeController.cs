@@ -102,14 +102,64 @@ namespace EmployeeManagementWebApp.Controllers
             return View(employeeEditViewModel);
         }
 
+        //Through model binding, the action method parameter EmployeeEditViewModel receives the posted edit form data
         [HttpPost]
-        public ViewResult Edit(EmployeeEditViewModel employeeEditModel)
+        public IActionResult Edit(EmployeeEditViewModel employeeEditModel)
         {
+            //check if the provided data is valid, if not rerender the edit view so the user can correct and resubmit the edit form
             if (ModelState.IsValid)
             {
+                //Retrieve the employee being edited from the database
+                Employee employee = _employeeRepository.GetEmployee(employeeEditModel.Id);
+                //update the employee object with the data in the model object
+                employee.Name = employeeEditModel.Name;
+                employee.Email = employeeEditModel.Email;
+                employee.Department = employeeEditModel.Department;
 
+                //If the user wants to change the photo, a new photo will be uploaded and the Photo property on the model object receives 
+                //the uploaded photo. If the Photo property is null, user did not upload a new photo and keeps his existing photo
+                if (employeeEditModel.Photo != null)
+                {
+                    //If a new photo is uploaded, the existing photo must be deleted. So check if there is an existing photo and delete
+                    if (employeeEditModel.ExistingPhotoPath != null)
+                    {
+                        string filePath = Path.Combine(_webHostingEnvironment.WebRootPath, "images", employeeEditModel.ExistingPhotoPath);
+                        System.IO.File.Delete(filePath);
+                    }
+
+                    //Save the new Photo in wwwroot/images folder and update PhotoPath property of the employee object which will be eventually saved in the database
+                    employee.PhotoPath = ProcessUploadFile(employeeEditModel);
+
+                    //Call update method on the repository service passing it the employee object to update the data in the database table
+                    Employee updatedEmployee = _employeeRepository.Update(employee);
+                    return RedirectToAction("index");
+                }
             }
-            return View();
+            return View(employeeEditModel);
+        }
+
+        private string ProcessUploadFile(EmployeeEditViewModel employeeEditModel)
+        {
+            string uniqueFileName = null;
+            // If the Photo property on the incoming model object is not null, then the user has selected an image to upload.
+            if (employeeEditModel.Photo != null)
+            {
+                // The image must be uploaded to the images folder in wwwroot. To get the path of the wwwroot folder we are using the inject
+                // WebHostingEnvironment service provided by ASP.NET Core
+
+                string uploadsFolder = Path.Combine(_webHostingEnvironment.WebRootPath, "images");
+
+                // To make sure the file name is unique we are appending a new GUID value and and an underscore to the file name
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + employeeEditModel.Photo.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                // Use CopyTo() method provided by IFormFile interface to copy the file to wwwroot/images folder
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    employeeEditModel.Photo.CopyTo(fileStream);
+                }
+            }
+            return uniqueFileName;
         }
     }
 }
