@@ -55,6 +55,8 @@ namespace EmployeeManagementWebApp
             }
             else
             {
+                app.UseExceptionHandler("/Error");
+                //app.UseStatusCodePages(); //quite simple
                 //app.UseStatusCodePagesWithRedirects("/Error/{0}");    //this is not symantically correct, returns 200 success
                 app.UseStatusCodePagesWithReExecute("/Error/{0}");  //this is symanitcally correct, returns 404 Not found
             }
