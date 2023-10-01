@@ -38,7 +38,7 @@ namespace EmployeeManagementWebApp.Controllers
         //[Route("[action]/{id?}")]   
         public ViewResult Details(int? id)
         {
-            throw new Exception();
+            //throw new Exception();
             Employee employee = _employeeRepository.GetEmployee(id ?? 1);
             if (employee == null)
             {

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -17,13 +18,18 @@ namespace EmployeeManagementWebApp
             CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateWebHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-        
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
+                .UseStartup<Startup>();
+
+
+        //public static IHostBuilder CreateWebHostBuilder(string[] args) =>
+        //    Host.CreateDefaultBuilder(args)
+                //.ConfigureWebHostDefaults(webBuilder =>
+                //{
+                //    webBuilder.UseStartup<Startup>();
+                //});
+
 
         //below is the code to use any configuration file instead appsettings.json by mentioning in configureAppconfiguration method
         //public static IHostBuilder CreateHostBuilder(string[] args) =>
