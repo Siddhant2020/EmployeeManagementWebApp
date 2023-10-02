@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace EmployeeManagementWebApp.Models
@@ -6,10 +7,13 @@ namespace EmployeeManagementWebApp.Models
     public class SQLEmployeeRepository : IEmployeeRepository
     {
         private readonly AppDbContext _dbContext;
+        private readonly ILogger<SQLEmployeeRepository> _logger;
 
-        public SQLEmployeeRepository(AppDbContext dbContext)
+        public SQLEmployeeRepository(AppDbContext dbContext,
+            ILogger<SQLEmployeeRepository> logger)
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
         public Employee Add(Employee employee)
         {

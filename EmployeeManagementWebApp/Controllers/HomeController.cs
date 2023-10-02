@@ -2,6 +2,7 @@
 using EmployeeManagementWebApp.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 
@@ -12,12 +13,15 @@ namespace EmployeeManagementWebApp.Controllers
     {
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IWebHostEnvironment _webHostingEnvironment;
+        private readonly ILogger<HomeController> _logger;
 
         public HomeController(IEmployeeRepository employeeRepository,
-            IWebHostEnvironment webHostingEnvironment)
+            IWebHostEnvironment webHostingEnvironment,
+            ILogger<HomeController> logger)
         {
             _employeeRepository = employeeRepository;
             _webHostingEnvironment = webHostingEnvironment;
+            _logger = logger;
         }
 
         //[Route("~/")]   //Map via Attribute Routing when url just contains the domain name http://localhost:38315/ or http://localhost:38315
@@ -38,7 +42,16 @@ namespace EmployeeManagementWebApp.Controllers
         //[Route("[action]/{id?}")]   
         public ViewResult Details(int? id)
         {
-            throw new Exception();
+            //throw new Exception();
+
+            //_logger.LogTrace("LogTrace");
+            //_logger.LogDebug("LogDebug");
+            //_logger.LogInformation("LogInformation");
+            //_logger.LogWarning("LogWarning");
+            //_logger.LogError("LogError");
+            //_logger.LogCritical("LogCritical");
+
+
             Employee employee = _employeeRepository.GetEmployee(id ?? 1);
             if (employee == null)
             {
