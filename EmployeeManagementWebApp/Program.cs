@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,15 +21,23 @@ namespace EmployeeManagementWebApp
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .ConfigureLogging((hostingContext, logging) =>
+                {
+                    logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+                    logging.AddConsole();
+                    logging.AddDebug();
+                    logging.AddEventSourceLogger();
+                    logging.AddNLog();
+                })
                 .UseStartup<Startup>();
 
 
         //public static IHostBuilder CreateWebHostBuilder(string[] args) =>
         //    Host.CreateDefaultBuilder(args)
-                //.ConfigureWebHostDefaults(webBuilder =>
-                //{
-                //    webBuilder.UseStartup<Startup>();
-                //});
+        //.ConfigureWebHostDefaults(webBuilder =>
+        //{
+        //    webBuilder.UseStartup<Startup>();
+        //});
 
 
         //below is the code to use any configuration file instead appsettings.json by mentioning in configureAppconfiguration method
