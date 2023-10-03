@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace EmployeeManagementWebApp
 {
@@ -32,7 +33,9 @@ namespace EmployeeManagementWebApp
         {
             services.AddDbContextPool<AppDbContext>(
                 dbOptions =>dbOptions.UseSqlServer(_configuration.GetConnectionString("EmployeeDBConnection")));
-            
+
+            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+
             IMvcBuilder mvcBuilder = services.AddMvc(options => options.EnableEndpointRouting = false).AddXmlSerializerFormatters();
             services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
             //services.AddRazorPages();
@@ -77,6 +80,8 @@ namespace EmployeeManagementWebApp
             //fileServerOptions.DefaultFilesOptions.DefaultFileNames.Clear();
             //fileServerOptions.DefaultFilesOptions.DefaultFileNames.Add("foo.html");
             //app.UseFileServer(fileServerOptions);
+
+            app.UseAuthentication();
 
             //app.UseMvcWithDefaultRoute(); //this sets up the default conventional routing
             app.UseMvc(routeBuilder =>
