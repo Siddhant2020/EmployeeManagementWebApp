@@ -1,4 +1,5 @@
 ﻿using EmployeeManagementWebApp.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,16 +10,44 @@ namespace EmployeeManagementWebApp.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly UserManager<IdentityUser> _userManger;
+        private readonly SignInManager<IdentityUser> _signInManager;
+
+        public AccountController(UserManager<IdentityUser> userManger,
+                                SignInManager<IdentityUser> signInManager)
+        {
+            _userManger = userManger;
+            _signInManager = signInManager;
+        }
+
         [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
 
-        //[HttpPost]
-        //public IActionResult Register(RegisterViewModel registerViewModel)
-        //{
-        //    return View();
-        //}
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new IdentityUser { UserName = registerViewModel.Email, Email = registerViewModel.Email };
+
+                var result = await _userManger.CreateAsync(user, registerViewModel.Password);
+
+                if (result.Succeeded)
+                {
+                    await _signInManager.SignInAsync(user, isPersistent: false); // false for session cookie, true for permanent cookie
+                    return RedirectToAction("index", "home");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+
+            return View(registerViewModel);
+        }
     }
 }
