@@ -14,6 +14,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace EmployeeManagementWebApp
 {
@@ -47,7 +49,11 @@ namespace EmployeeManagementWebApp
 
             //});
 
-            IMvcBuilder mvcBuilder = services.AddMvc(options => options.EnableEndpointRouting = false).AddXmlSerializerFormatters();
+            IMvcBuilder mvcBuilder = services.AddMvc(options => {
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+                options.EnableEndpointRouting = false; 
+            }).AddXmlSerializerFormatters();
             services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
             //services.AddRazorPages();
             //MvcOptions options = new MvcOptions();

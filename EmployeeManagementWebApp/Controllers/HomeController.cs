@@ -1,5 +1,6 @@
 ﻿using EmployeeManagementWebApp.Models;
 using EmployeeManagementWebApp.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -9,6 +10,7 @@ using System.IO;
 namespace EmployeeManagementWebApp.Controllers
 {
     //[Route("[controller]")]
+    //[Authorize]
     public class HomeController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;
@@ -27,6 +29,7 @@ namespace EmployeeManagementWebApp.Controllers
         //[Route("~/")]   //Map via Attribute Routing when url just contains the domain name http://localhost:38315/ or http://localhost:38315
         //[Route("")] //Map via Attribute Routing when url contains just the controller name http://localhost:38315/home or http://localhost:38315/home/
         //[Route("[action]")]    //Map via Attribute Routing when url contains the controller name and the action method as well http://localhost:38315/home/index
+        [AllowAnonymous]
         public ViewResult Index()
         {
             var model = _employeeRepository.GetAllEmployee();
@@ -40,6 +43,7 @@ namespace EmployeeManagementWebApp.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         //[Route("[action]/{id?}")]   
+        [AllowAnonymous]
         public ViewResult Details(int? id)
         {
             //throw new Exception();
@@ -68,12 +72,14 @@ namespace EmployeeManagementWebApp.Controllers
         }
 
         [HttpGet]
+        //[Authorize]
         public ViewResult Create()
         {
             return View();
         }
 
         [HttpPost]
+        //[Authorize]
         public IActionResult Create(EmployeeCreateViewModel employeeModel)
         {
             if (ModelState.IsValid)
@@ -109,6 +115,7 @@ namespace EmployeeManagementWebApp.Controllers
         }
 
         [HttpGet]
+        //[Authorize]
         public ViewResult Edit(int id)
         {
             Employee employee = _employeeRepository.GetEmployee(id);
@@ -125,6 +132,7 @@ namespace EmployeeManagementWebApp.Controllers
 
         //Through model binding, the action method parameter EmployeeEditViewModel receives the posted edit form data
         [HttpPost]
+        //[Authorize]
         public IActionResult Edit(EmployeeEditViewModel employeeEditModel)
         {
             //check if the provided data is valid, if not rerender the edit view so the user can correct and resubmit the edit form
