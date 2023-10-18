@@ -68,6 +68,24 @@ namespace EmployeeManagementWebApp.Controllers
             return View();
         }
 
+
+        [HttpPost]
+        [HttpGet]
+        //[AcceptVerbs("Get", "Post")] //this is same as the line written above, both the approach are same
+        [AllowAnonymous]
+        public async Task<IActionResult> IsEmailInUse(string email)
+        {
+            var user = await _userManger.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json($"Email {email} is already in use");
+            }
+        }
+
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
