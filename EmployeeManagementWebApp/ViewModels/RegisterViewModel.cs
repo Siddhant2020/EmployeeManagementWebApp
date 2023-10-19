@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EmployeeManagementWebApp.Utilities;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,6 +13,7 @@ namespace EmployeeManagementWebApp.ViewModels
         [Required]
         [EmailAddress]
         [Remote(action: "IsEmailInUse", controller: "Account")]
+        [ValidEmailDomain(allowedDomain : "pragim.com", ErrorMessage = "Email domain must be pragim.com")]
         public string Email { get; set; }
 
         [Required]
