@@ -14,10 +14,12 @@ namespace EmployeeManagementWebApp.Utilities
         {
             this.allowedDomain = allowedDomain;
         }
+
         public override bool IsValid(object value)
         {
             string[] strings = value.ToString().Split('@');
             return strings[1].ToUpper() == allowedDomain.ToUpper();
         }
+
     }
 }

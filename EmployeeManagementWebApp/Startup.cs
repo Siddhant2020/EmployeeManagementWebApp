@@ -36,7 +36,7 @@ namespace EmployeeManagementWebApp
             services.AddDbContextPool<AppDbContext>(
                 dbOptions =>dbOptions.UseSqlServer(_configuration.GetConnectionString("EmployeeDBConnection")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>(options => {
+            services.AddIdentity<ApplicationUser, IdentityRole>(options => {
                 options.Password.RequiredLength = 10;
                 options.Password.RequiredUniqueChars = 3;
 

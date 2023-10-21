@@ -1,4 +1,5 @@
-﻿using EmployeeManagementWebApp.ViewModels;
+﻿using EmployeeManagementWebApp.Models;
+using EmployeeManagementWebApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,11 +12,11 @@ namespace EmployeeManagementWebApp.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManger;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManger;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public AccountController(UserManager<IdentityUser> userManger,
-                                SignInManager<IdentityUser> signInManager)
+        public AccountController(UserManager<ApplicationUser> userManger,
+                                SignInManager<ApplicationUser> signInManager)
         {
             _userManger = userManger;
             _signInManager = signInManager;
@@ -92,7 +93,7 @@ namespace EmployeeManagementWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = registerViewModel.Email, Email = registerViewModel.Email };
+                var user = new ApplicationUser { UserName = registerViewModel.Email, Email = registerViewModel.Email, City = registerViewModel.City };
 
                 var result = await _userManger.CreateAsync(user, registerViewModel.Password);
 

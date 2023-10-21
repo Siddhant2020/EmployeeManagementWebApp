@@ -13,7 +13,7 @@ namespace EmployeeManagementWebApp.ViewModels
         [Required]
         [EmailAddress]
         [Remote(action: "IsEmailInUse", controller: "Account")]
-        [ValidEmailDomain(allowedDomain : "pragim.com", ErrorMessage = "Email domain must be pragim.com")]
+        [ValidEmailDomain(allowedDomain : "gmail.com", ErrorMessage = "Email domain must be gmail.com")]
         public string Email { get; set; }
 
         [Required]
@@ -24,5 +24,7 @@ namespace EmployeeManagementWebApp.ViewModels
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "Password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        public string City { get; set; }
     }
 }
