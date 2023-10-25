@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace EmployeeManagementWebApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdministrationController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -172,29 +173,22 @@ namespace EmployeeManagementWebApp.Controllers
                 if (model[i].IsSelected && !(await _userManager.IsInRoleAsync(user, role.Name)))
                 {
                     result = await _userManager.AddToRoleAsync(user, role.Name);
-
-                    if (result.Succeeded)
-                    {
-                        if (i < model.Count - 1)
-                            continue;
-                        else
-                            return RedirectToAction("EditRole", new { Id = roleId });
-                    }
                 }
                 else if (!model[i].IsSelected && (await _userManager.IsInRoleAsync(user, role.Name)))
                 {
                     result = await _userManager.RemoveFromRoleAsync(user, role.Name);
-                    if (result.Succeeded)
-                    {
-                        if (i < model.Count - 1)
-                            continue;
-                        else
-                            return RedirectToAction("EditRole", new { Id = roleId });
-                    }
                 }
                 else
                 {
                     continue;
+                }
+
+                if (result.Succeeded)
+                {
+                    if (i < model.Count - 1)
+                        continue;
+                    else
+                        return RedirectToAction("EditRole", new { Id = roleId });
                 }
             }
 
