@@ -111,5 +111,12 @@ namespace EmployeeManagementWebApp.Controllers
 
             return View(registerViewModel);
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }
