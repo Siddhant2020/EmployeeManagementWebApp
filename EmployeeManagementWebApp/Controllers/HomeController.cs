@@ -190,5 +190,24 @@ namespace EmployeeManagementWebApp.Controllers
             }
             return uniqueFileName;
         }
+
+
+        public IActionResult Delete(int id)
+        {
+            Employee employee = _employeeRepository.GetEmployee(id);
+            if (employee == null)
+            {
+                Response.StatusCode = 404;
+                return View("EmployeeNotFound", id);
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(employee.PhotoPath))
+                    System.IO.File.Delete(Path.Combine(_webHostingEnvironment.WebRootPath, "images", employee.PhotoPath));
+                
+                _employeeRepository.Delete(id);
+                return RedirectToAction("index", "home");
+            }
+        }
     }
 }
