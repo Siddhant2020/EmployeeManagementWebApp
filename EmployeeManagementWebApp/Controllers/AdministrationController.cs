@@ -23,6 +23,30 @@ namespace EmployeeManagementWebApp.Controllers
             _userManager = userManager;
         }
 
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with Id = {id} cannot be found";
+                return View("NotFound");
+            }
+            else
+            {
+                var result = await _userManager.DeleteAsync(user);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("ListUsers");
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+                return View("ListUsers");
+            }
+
+        }
+
         [HttpGet]
         //[AllowAnonymous]
         public IActionResult CreateRole()
@@ -127,7 +151,7 @@ namespace EmployeeManagementWebApp.Controllers
             if (role == null)
             {
                 ViewBag.ErrorMessage = $"Role with Id = {roleId} cannot be found";
-                return RedirectToAction("NotFound");
+                return View("NotFound");
             }
 
             var model = new List<UserRoleViewModel>();
@@ -161,7 +185,7 @@ namespace EmployeeManagementWebApp.Controllers
             if (role == null)
             {
                 ViewBag.ErrorMessage = $"Role with Id = {roleId} cannot be found";
-                return RedirectToAction("NotFound");
+                return View("NotFound");
             }
 
             for (int i = 0; i < model.Count; i++)
@@ -209,7 +233,7 @@ namespace EmployeeManagementWebApp.Controllers
             if (user == null)
             {
                 ViewBag.ErrorMessage = $"User with Id = {Id} cannot be found";
-                return RedirectToAction("NotFound");
+                return View("NotFound");
             }
 
             var userClaims = await _userManager.GetClaimsAsync(user);
@@ -236,7 +260,7 @@ namespace EmployeeManagementWebApp.Controllers
             if (user == null)
             {
                 ViewBag.ErrorMessage = $"User with Id = {model.Id} cannot be found";
-                return RedirectToAction("NotFound");
+                return View("NotFound");
             }
             else
             {
