@@ -191,7 +191,7 @@ namespace EmployeeManagementWebApp.Controllers
             return uniqueFileName;
         }
 
-
+        [HttpPost]
         public IActionResult Delete(int id)
         {
             Employee employee = _employeeRepository.GetEmployee(id);

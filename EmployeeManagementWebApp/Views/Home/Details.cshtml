@@ -10,36 +10,47 @@
 
 <div class="row justify-content-center m-3">
     <div class="col-sm-8">
-        <div class="card-header"  style="background-color:azure">
+        <div class="card-header" style="background-color:azure">
             <h1>@Model.Employee.Name</h1>
         </div>
 
-        <div class="card-body text-center"  style="background-color:azure">
-            <img class="card-img-top" src="@photoPath" asp-append-version="true"/>
+        <div class="card-body text-center" style="background-color:azure">
+            <img class="card-img-top" src="@photoPath" asp-append-version="true" />
 
             <h4>Employee ID : @Model.Employee.Id</h4>
             <h4>Email : @Model.Employee.Email</h4>
             <h4>Department : @Model.Employee.Department</h4>
         </div>
-        <div class="card-footer text-center"  style="background-color:azure">
-            <a asp-controller="home" asp-action="index" class="btn btn-primary">Back</a>
-            <a asp-controller="home" asp-action="edit" class="btn btn-primary">Edit</a>
-            <a asp-controller="home" asp-action="delete" asp-route-id="@Model.Employee.Id" class="btn btn-danger">Delete</a>
+        <div class="card-footer text-center" style="background-color:azure">
+            <form asp-action="Delete" asp-route-id="@Model.Employee.Id" method="post">
+                <span id="confirmDeleteSpan_@Model.Employee.Id" style="display:none">
+                    <span>Are you sure, you want to delete?</span>
+                    <button type="submit" class="btn btn-danger">Yes</button>
+                    <a class="btn btn-primary" onclick="confirmDelete('@Model.Employee.Id', false)">No</a>
+                </span>
+                <span id="deleteSpan_@Model.Employee.Id">
+                    <a asp-controller="home" asp-action="index" class="btn btn-primary">Back</a>
+                    <a asp-controller="home" asp-action="edit" class="btn btn-primary">Edit</a>
+                    @*<a asp-controller="home" asp-action="delete" asp-route-id="@Model.Employee.Id" class="btn btn-danger">Delete</a>*@
+                    <a class="btn btn-danger" onclick="confirmDelete('@Model.Employee.Id', true)">Delete</a>
+                </span>
+
+            </form>
         </div>
     </div>
 </div>
-    
+
 
 @*<div>
-    Name : @Model.Employee.Name
-</div>
-<div>
-    Email : @Model.Employee.Email
-</div>
-<div>
-    Department : @Model.Employee.Department
-</div>*@
+        Name : @Model.Employee.Name
+    </div>
+    <div>
+        Email : @Model.Employee.Email
+    </div>
+    <div>
+        Department : @Model.Employee.Department
+    </div>*@
 
 @section Scripts{
-    <script src="~/js/customscript.js"></script>
+    <script src="~/js/CustomScript.js"></script>
 }

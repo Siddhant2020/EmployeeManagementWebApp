@@ -19,30 +19,45 @@
                 @*@Html.ActionLink("View", "details", "home", new { id = employee.Id})*@
                 @* <a href="/home/details/@employee.Id" class="btn btn-primary">View</a> *@
                 @*<a href="#" class="btn btn-danger m-1">Delete</a>*@
-                <a asp-controller="home" asp-action="details" asp-route-id="@employee.Id" class="btn btn-primary m-1">View</a>
-                <a asp-controller="home" asp-action="edit" asp-route-id="@employee.Id" class="btn btn-primary m-1">Edit</a>
-                <a asp-controller="home" asp-action="delete" asp-route-id="@employee.Id" class="btn btn-danger m-1">Delete</a>
+                <form asp-action="Delete" asp-route-id="@employee.Id" method="post">
+                    <span id="confirmDeleteSpan_@employee.Id" style="display:none">
+                        <span>Are you sure, you want to delete?</span>
+                        <button type="submit" class="btn btn-danger">Yes</button>
+                        <a class="btn btn-primary" onclick="confirmDelete('@employee.Id', false)">No</a>
+                    </span>
+                    <span id="deleteSpan_@employee.Id">
+                        <a asp-controller="home" asp-action="details" asp-route-id="@employee.Id" class="btn btn-primary m-1">View</a>
+                        <a asp-controller="home" asp-action="edit" asp-route-id="@employee.Id" class="btn btn-primary m-1">Edit</a>
+                        @*<a asp-controller="home" asp-action="delete" asp-route-id="@employee.Id" class="btn btn-danger m-1">Delete</a>*@
+                        <a class="btn btn-danger" onclick="confirmDelete('@employee.Id', true)">Delete</a>
+                    </span>
+
+                </form>
             </div>
         </div>
     }
 </div>
 
-       @* <table>
-            <thead>
+@section Scripts{
+    <script src="~/js/CustomScript.js"></script>
+}
+
+@* <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Department</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var employee in Model)
+            {
                 <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Department</th>
+                    <td>@employee.Id</td>
+                    <td>@employee.Name</td>
+                    <td>@employee.Department</td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var employee in Model)
-                {
-                    <tr>
-                        <td>@employee.Id</td>
-                        <td>@employee.Name</td>
-                        <td>@employee.Department</td>
-                    </tr>
-                }
-            </tbody>
-        </table>*@
+            }
+        </tbody>
+    </table>*@
