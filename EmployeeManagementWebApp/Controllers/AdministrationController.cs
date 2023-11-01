@@ -3,6 +3,8 @@ using EmployeeManagementWebApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +17,15 @@ namespace EmployeeManagementWebApp.Controllers
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ILogger<AdministrationController> _logger;
 
         public AdministrationController(RoleManager<IdentityRole> roleManager,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            ILogger<AdministrationController> logger)
         {
             _roleManager = roleManager;
             _userManager = userManager;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -34,17 +39,27 @@ namespace EmployeeManagementWebApp.Controllers
             }
             else
             {
-                var result = await _roleManager.DeleteAsync(role);
+                try
+                {
+                    var result = await _roleManager.DeleteAsync(role);
 
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("ListRoles");
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("ListRoles");
+                    }
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                    return View("ListRoles");
                 }
-                foreach (var error in result.Errors)
+                catch (DbUpdateException ex)
                 {
-                    ModelState.AddModelError("", error.Description);
+                    _logger.LogError($"Error deleting role {ex}");
+                    ViewBag.ErrorTitle = $"{role.Name} role is in use";
+                    ViewBag.ErrorMessage = $"{role.Name} role cannot be deleted as there are user in this role, please remove the user from the role and then try to delete";
+                    return View("Error");
                 }
-                return View("ListRoles");
 
             }
         }
