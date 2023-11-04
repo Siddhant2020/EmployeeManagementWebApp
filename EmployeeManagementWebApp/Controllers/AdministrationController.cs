@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace EmployeeManagementWebApp.Controllers
@@ -26,6 +27,86 @@ namespace EmployeeManagementWebApp.Controllers
             _roleManager = roleManager;
             _userManager = userManager;
             _logger = logger;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ManageUserClaims(string userId)
+        {
+            ApplicationUser user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with id : {userId} cannot be found";
+                return View("NotFound");
+            }
+            else
+            {
+                var existingUserClaims = await _userManager.GetClaimsAsync(user);
+
+                var model = new UserClaimsViewModel
+                {
+                    UserId = userId
+                };
+
+
+                foreach (Claim claim in ClaimsStore.AllClaims)
+                {
+                    UserClaim userClaim = new UserClaim
+                    {
+                        ClaimType = claim.Type
+                    };
+
+                    //If the user has the claim, set IsSelected property to true, so the checkbox next to the claim is checked on the UI
+                    if (existingUserClaims.Any(c => c.Type == claim.Type))
+                    {
+                        userClaim.IsSelected = true;
+                    }
+                    model.Claims.Add(userClaim);
+                }
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ManageUserClaims(UserClaimsViewModel model)
+        {
+            ApplicationUser user = await _userManager.FindByIdAsync(model.UserId);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with id : {model.UserId} cannot be found";
+                return View("NotFound");
+            }
+            else
+            {
+                var claims = await _userManager.GetClaimsAsync(user);
+                var result = await _userManager.RemoveClaimsAsync(user, claims);
+
+                if (!result.Succeeded)
+                {
+                    ModelState.AddModelError("", "Cannot remove user existing claims");
+                    return View(model);
+                }
+
+
+                //result = await _userManager.AddClaimsAsync(user, ClaimsStore.AllClaims.Where(claim => claim.Type.Equals(model.Claims.Where(c => c.IsSelected).Select(claim => claim.ClaimType))));
+
+                result = await _userManager.AddClaimsAsync(user, model.Claims.Where(c => c.IsSelected).Select(c => new Claim(c.ClaimType, c.ClaimType)));  //by pragim
+
+                //foreach (var claim in model.Claims)
+                //{
+                //    if (claim.IsSelected)
+                //    {
+                //        Claim selectedClaim = ClaimsStore.AllClaims.FirstOrDefault(c => c.Type == claim.ClaimType);
+                //        result = await _userManager.AddClaimAsync(user, selectedClaim);
+                if (!result.Succeeded)
+                {
+                    ModelState.AddModelError("", "Cannot add selected claims to user");
+                    return View(model);
+                }
+                //    }
+                //}
+
+                return RedirectToAction("EditUser", new { Id = model.UserId });
+            }
         }
 
         [HttpGet]
@@ -123,9 +204,6 @@ namespace EmployeeManagementWebApp.Controllers
             }
             #endregion
             return RedirectToAction("EditUser", new { Id = userId });
-
-
-
         }
 
 
