@@ -58,6 +58,8 @@ namespace EmployeeManagementWebApp
             services.AddAuthorization(options => {
                 //Claims Policy
                 options.AddPolicy("DeleteRolePolicy", policy => policy.RequireClaim("Delete Role"));
+                options.AddPolicy("EditRolePolicy", policy => policy.RequireClaim("Edit Role"));
+                options.AddPolicy("CreateRolePolicy", policy => policy.RequireClaim("Create Role"));
 
                 //Roles Policy
                 options.AddPolicy("AdminRolePolicy", policy => policy.RequireRole("Admin"));
