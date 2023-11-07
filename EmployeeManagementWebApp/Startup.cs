@@ -56,7 +56,14 @@ namespace EmployeeManagementWebApp
             }).AddXmlSerializerFormatters();
 
             services.AddAuthorization(options => {
-                options.AddPolicy("DeleteRolePolicy", policy => policy.RequireClaim("Delete Role").RequireClaim("Create Role"));
+                //Claims Policy
+                options.AddPolicy("DeleteRolePolicy", policy => policy.RequireClaim("Delete Role"));
+
+                //Roles Policy
+                options.AddPolicy("AdminRolePolicy", policy => policy.RequireRole("Admin"));
+
+                //To include multiple roles in the policy
+                //options.AddPolicy("AdminRolePolicy", policy => policy.RequireRole("Admin", "User", "IAM"));
             });
 
             services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
