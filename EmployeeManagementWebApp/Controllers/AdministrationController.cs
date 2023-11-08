@@ -269,15 +269,17 @@ namespace EmployeeManagementWebApp.Controllers
 
         }
 
-        [HttpGet]
         //[AllowAnonymous]
+        [HttpGet]
+        [Authorize(Policy = "CreateRolePolicy")]
         public IActionResult CreateRole()
         {
             return View();
         }
 
-        [HttpPost]
         //[AllowAnonymous]
+        [HttpPost]
+        [Authorize(Policy = "CreateRolePolicy")]
         public async Task<IActionResult> CreateRole(CreateRoleViewModel createRoleViewModel)
         {
             if (ModelState.IsValid)
@@ -506,6 +508,14 @@ namespace EmployeeManagementWebApp.Controllers
 
                 return View(model);
             }
+        }
+
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
 
     }

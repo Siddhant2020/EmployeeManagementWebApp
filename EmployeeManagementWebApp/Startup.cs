@@ -55,6 +55,11 @@ namespace EmployeeManagementWebApp
                 options.EnableEndpointRouting = false; 
             }).AddXmlSerializerFormatters();
 
+
+            services.ConfigureApplicationCookie(options => {
+                options.AccessDeniedPath = new PathString("/Administration/AccessDenied");
+            });
+
             services.AddAuthorization(options => {
                 //Claims Policy
                 options.AddPolicy("DeleteRolePolicy", policy => policy.RequireClaim("Delete Role"));
