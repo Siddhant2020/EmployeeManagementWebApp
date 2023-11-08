@@ -56,7 +56,7 @@ namespace EmployeeManagementWebApp.Controllers
                     };
 
                     //If the user has the claim, set IsSelected property to true, so the checkbox next to the claim is checked on the UI
-                    if (existingUserClaims.Any(c => c.Type == claim.Type))
+                    if (existingUserClaims.Any(c => c.Type == claim.Type && c.Value == "true"))
                     {
                         userClaim.IsSelected = true;
                     }
@@ -89,7 +89,7 @@ namespace EmployeeManagementWebApp.Controllers
 
                 //result = await _userManager.AddClaimsAsync(user, ClaimsStore.AllClaims.Where(claim => claim.Type.Equals(model.Claims.Where(c => c.IsSelected).Select(claim => claim.ClaimType))));
 
-                result = await _userManager.AddClaimsAsync(user, model.Claims.Where(c => c.IsSelected).Select(c => new Claim(c.ClaimType, c.ClaimType)));  //by pragim
+                result = await _userManager.AddClaimsAsync(user, model.Claims.Select(c => new Claim(c.ClaimType, c.IsSelected ? "true" : "false")));  //by pragim
 
                 //foreach (var claim in model.Claims)
                 //{
@@ -471,7 +471,7 @@ namespace EmployeeManagementWebApp.Controllers
                 Email = user.Email,
                 UserName = user.UserName,
                 City = user.City,
-                Claims = userClaims.Select(c => c.Value).ToList(),
+                Claims = userClaims.Select(c => c.Type + " : " + c.Value).ToList(),
                 Roles = userRoles
 
             };
