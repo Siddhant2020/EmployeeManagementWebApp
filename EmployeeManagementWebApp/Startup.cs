@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using EmployeeManagementWebApp.Security;
 
 namespace EmployeeManagementWebApp
 {
@@ -64,12 +65,15 @@ namespace EmployeeManagementWebApp
                 //Claims Policy
                 options.AddPolicy("DeleteRolePolicy", policy => policy.RequireClaim("Delete Role", "true"));
                 //options.AddPolicy("EditRolePolicy", policy => policy.RequireClaim("Edit Role", "true"));
-                options.AddPolicy("EditRolePolicy", 
-                    policy => policy.RequireAssertion(context => 
-                    context.User.IsInRole("Admin") &&
-                    context.User.HasClaim(claim => claim.Type == "Edit Role" && claim.Value == "true") ||
-                    context.User.IsInRole("Super Admin")                    
-                    ));
+                //options.AddPolicy("EditRolePolicy", 
+                //    policy => policy.RequireAssertion(context => 
+                //    context.User.IsInRole("Admin") &&
+                //    context.User.HasClaim(claim => claim.Type == "Edit Role" && claim.Value == "true") ||
+                //    context.User.IsInRole("Super Admin")                    
+                //    ));
+                options.AddPolicy("EditRolePolicy",
+                    policy => policy.AddRequirements(new ManageAdminRolesAndClaimsRequirement()));
+
                 options.AddPolicy("CreateRolePolicy", policy => policy.RequireClaim("Create Role", "true"));
 
                 //Roles Policy
@@ -80,6 +84,7 @@ namespace EmployeeManagementWebApp
             });
 
             services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
+            services.AddSingleton<IAuthorizationHandler, CanEditOnlyOtherAdminRolesAndClaimsHandler>();
             //services.AddRazorPages();
             //MvcOptions options = new MvcOptions();
             //options.EnableEndpointRouting = false;
