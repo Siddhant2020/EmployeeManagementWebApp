@@ -21,7 +21,7 @@ namespace EmployeeManagementWebApp.Security
             string loggerInAdminId = context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
             string adminIdBeingEdited = authFilterContext.HttpContext.Request.Query["userId"];
 
-            if (context.User.IsInRole("Admin") && context.User.HasClaim(claim => claim.Type == "Edit Role" && claim.Value == "true") && adminIdBeingEdited.ToLower() != loggerInAdminId.ToLower() || context.User.IsInRole("Super Admin"))
+            if (context.User.IsInRole("Admin") && context.User.HasClaim(claim => claim.Type == "Edit Role" && claim.Value == "true") && adminIdBeingEdited.ToLower() != loggerInAdminId.ToLower())
             {
                 context.Succeed(requirement);
             }

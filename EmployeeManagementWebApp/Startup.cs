@@ -85,6 +85,7 @@ namespace EmployeeManagementWebApp
 
             services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
             services.AddSingleton<IAuthorizationHandler, CanEditOnlyOtherAdminRolesAndClaimsHandler>();
+            services.AddSingleton<IAuthorizationHandler, SuperAdminHandler>();
             //services.AddRazorPages();
             //MvcOptions options = new MvcOptions();
             //options.EnableEndpointRouting = false;
