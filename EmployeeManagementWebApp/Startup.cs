@@ -74,6 +74,8 @@ namespace EmployeeManagementWebApp
                 options.AddPolicy("EditRolePolicy",
                     policy => policy.AddRequirements(new ManageAdminRolesAndClaimsRequirement()));
 
+                options.InvokeHandlersAfterFailure = false;
+
                 options.AddPolicy("CreateRolePolicy", policy => policy.RequireClaim("Create Role", "true"));
 
                 //Roles Policy

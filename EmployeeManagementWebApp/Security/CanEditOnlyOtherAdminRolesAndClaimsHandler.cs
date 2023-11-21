@@ -25,6 +25,10 @@ namespace EmployeeManagementWebApp.Security
             {
                 context.Succeed(requirement);
             }
+            //else
+            //{
+            //    context.Fail();
+            //}
             return Task.CompletedTask;
         }
     }
