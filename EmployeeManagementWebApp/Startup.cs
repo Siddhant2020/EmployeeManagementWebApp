@@ -56,6 +56,13 @@ namespace EmployeeManagementWebApp
                 options.EnableEndpointRouting = false; 
             }).AddXmlSerializerFormatters();
 
+            services.AddAuthentication().AddGoogle(
+                    options =>
+                    {
+                        options.ClientId = _configuration["Authentication:Google:ClientId"];
+                        options.ClientSecret = _configuration["Authentication:Google:ClientSecret"];
+                    }
+                );
 
             services.ConfigureApplicationCookie(options => {
                 options.AccessDeniedPath = new PathString("/Administration/AccessDenied");
