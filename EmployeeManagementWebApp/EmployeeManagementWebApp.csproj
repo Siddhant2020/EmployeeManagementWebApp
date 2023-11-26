@@ -3,7 +3,8 @@
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.1</TargetFramework>
 		<!--<AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>-->
-		<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>	
+		<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+		<UserSecretsId>cfb55f84-2b64-4a5a-9e97-f23c8a281782</UserSecretsId>	
 		<!-- With Inprocess hosting, launch.settings has IISExpress profile set to run application on single server, which is faster and do not add on the penalty-->
 	</PropertyGroup>
 
