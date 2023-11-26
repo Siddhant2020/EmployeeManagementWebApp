@@ -56,13 +56,17 @@ namespace EmployeeManagementWebApp
                 options.EnableEndpointRouting = false; 
             }).AddXmlSerializerFormatters();
 
-            services.AddAuthentication().AddGoogle(
+            services.AddAuthentication()
+                .AddGoogle(
                     options =>
                     {
                         options.ClientId = _configuration["Authentication:Google:ClientId"];
                         options.ClientSecret = _configuration["Authentication:Google:ClientSecret"];
                     }
-                );
+                ).AddFacebook(options => {
+                    options.AppId = _configuration["Authentication:Facebook:AppId"];
+                    options.AppSecret = _configuration["Authentication:Facebook:AppSecret"];
+                });
 
             services.ConfigureApplicationCookie(options => {
                 options.AccessDeniedPath = new PathString("/Administration/AccessDenied");
