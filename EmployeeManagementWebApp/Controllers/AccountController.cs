@@ -47,8 +47,17 @@ namespace EmployeeManagementWebApp.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel loginViewModel, string returnUrl)
         {
+            loginViewModel.ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
             if (ModelState.IsValid)
             {
+                var user = await _userManger.FindByEmailAsync(loginViewModel.Email);
+                if (user != null && !user.EmailConfirmed && (await _userManger.CheckPasswordAsync(user, loginViewModel.Password)))
+                {
+                    ModelState.AddModelError(string.Empty, "Email not confirmed yet");
+                    return View(loginViewModel);
+                }
+
                 var result = await _signInManager.PasswordSignInAsync(loginViewModel.Email, loginViewModel.Password, loginViewModel.RememberMe, false);
 
                 if (result.Succeeded)
@@ -159,6 +168,21 @@ namespace EmployeeManagementWebApp.Controllers
                 return View("Login", loginViewModel);
             }
 
+            //Get the email claim value
+            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+            ApplicationUser user = null;
+
+            if (email != null)
+            {
+                user = await _userManger.FindByEmailAsync(email);
+
+                if (user != null && !user.EmailConfirmed)
+                {
+                    ModelState.AddModelError(string.Empty, "Email not confirmed yet");
+                    return View("Login", loginViewModel);
+                }
+            }
+
             //If the user already has a login (i.e. if there is a record in AspNetUserLogins table) then sign-in the user with this external login provider
             var signInResult = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
             if (signInResult.Succeeded)
@@ -168,13 +192,10 @@ namespace EmployeeManagementWebApp.Controllers
             //If there is no record in AspNetUserLogins table, the user may not have a local account
             else
             {
-                //Get the email claim value
-                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-
                 if (email != null)
                 {
                     //Create a new user without password if we do not have a user already
-                    var user = await _userManger.FindByEmailAsync(email);
+                    //user = await _userManger.FindByEmailAsync(email);
 
                     if (user == null)
                     {
