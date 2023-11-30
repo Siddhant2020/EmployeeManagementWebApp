@@ -3,6 +3,7 @@ using EmployeeManagementWebApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +16,15 @@ namespace EmployeeManagementWebApp.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManger;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ILogger<AccountController> _logger;
 
         public AccountController(UserManager<ApplicationUser> userManger,
-                                SignInManager<ApplicationUser> signInManager)
+                                SignInManager<ApplicationUser> signInManager,
+                                ILogger<AccountController> logger)
         {
             _userManger = userManger;
             _signInManager = signInManager;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -115,13 +119,23 @@ namespace EmployeeManagementWebApp.Controllers
 
                 if (result.Succeeded)
                 {
+                    var token = await _userManger.GenerateEmailConfirmationTokenAsync(user);
+
+                    var confirmationLink = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, token = token }, Request.Scheme);
+
+                    _logger.Log(LogLevel.Warning, confirmationLink);
+
                     if (_signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                     {
                         return RedirectToAction("ListUsers", "Administration");
                     }
 
-                    await _signInManager.SignInAsync(user, isPersistent: false); // false for session cookie, true for permanent cookie
-                    return RedirectToAction("index", "home");
+                    ViewBag.ErrorTitle = "Registration successful";
+                    ViewBag.ErrorMessage = "Before you can login, please confirm your email by clicking on the confirmation link we have sent you on your email";
+                    return View("Error");
+
+                    //await _signInManager.SignInAsync(user, isPersistent: false); // false for session cookie, true for permanent cookie
+                    //return RedirectToAction("index", "home");
                 }
 
                 foreach (var error in result.Errors)
@@ -131,6 +145,30 @@ namespace EmployeeManagementWebApp.Controllers
             }
 
             return View(registerViewModel);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            if (userId == null || token == null)
+            {
+                return RedirectToAction("index", "home");
+            }
+            var user = await _userManger.FindByIdAsync(userId);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"The user ID {userId} is invalid";
+                return View("NotFound");
+            }
+
+            var result = await _userManger.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+            {
+                return View();
+            }
+            ViewBag.ErrorTitle = "Email cannot be confirmed";
+            return View("Error");
         }
 
         [AllowAnonymous]
