@@ -44,6 +44,9 @@ namespace EmployeeManagementWebApp
             }).AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 
+            //Password Reset Token Lifetime
+            services.Configure<DataProtectionTokenProviderOptions>(o => o.TokenLifespan = TimeSpan.FromHours(5));
+            
             //services.Configure<IdentityOptions>(options =>
             //{
             //    options.Password.RequiredLength = 10;
