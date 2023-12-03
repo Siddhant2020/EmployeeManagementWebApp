@@ -26,8 +26,8 @@
                         <a class="btn btn-primary" onclick="confirmDelete('@employee.Id', false)">No</a>
                     </span>
                     <span id="deleteSpan_@employee.Id">
-                        <a asp-controller="home" asp-action="details" asp-route-id="@employee.Id" class="btn btn-primary m-1">View</a>
-                        <a asp-controller="home" asp-action="edit" asp-route-id="@employee.Id" class="btn btn-primary m-1">Edit</a>
+                        <a asp-controller="home" asp-action="details" asp-route-id="@employee.EncryptedId" class="btn btn-primary m-1">View</a>
+                        <a asp-controller="home" asp-action="edit" asp-route-id="@employee.EncryptedId" class="btn btn-primary m-1">Edit</a>
                         @*<a asp-controller="home" asp-action="delete" asp-route-id="@employee.Id" class="btn btn-danger m-1">Delete</a>*@
                         <a class="btn btn-danger" onclick="confirmDelete('@employee.Id', true)">Delete</a>
                     </span>

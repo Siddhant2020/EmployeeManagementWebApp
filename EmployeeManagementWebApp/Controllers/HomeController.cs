@@ -1,11 +1,14 @@
 ﻿using EmployeeManagementWebApp.Models;
+using EmployeeManagementWebApp.Security;
 using EmployeeManagementWebApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace EmployeeManagementWebApp.Controllers
 {
@@ -16,14 +19,18 @@ namespace EmployeeManagementWebApp.Controllers
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IWebHostEnvironment _webHostingEnvironment;
         private readonly ILogger<HomeController> _logger;
+        private readonly IDataProtector _protector;
 
         public HomeController(IEmployeeRepository employeeRepository,
             IWebHostEnvironment webHostingEnvironment,
-            ILogger<HomeController> logger)
+            ILogger<HomeController> logger,
+            IDataProtectionProvider dataProtectionProvider,
+            DataProtectionPurposeStrings dataProtectionPurposeStrings)
         {
             _employeeRepository = employeeRepository;
             _webHostingEnvironment = webHostingEnvironment;
             _logger = logger;
+            _protector = dataProtectionProvider.CreateProtector(dataProtectionPurposeStrings.EmployeeIdRoutValue);
         }
 
         //[Route("~/")]   //Map via Attribute Routing when url just contains the domain name http://localhost:38315/ or http://localhost:38315
@@ -32,7 +39,11 @@ namespace EmployeeManagementWebApp.Controllers
         [AllowAnonymous]
         public ViewResult Index()
         {
-            var model = _employeeRepository.GetAllEmployee();
+            var model = _employeeRepository.GetAllEmployee().Select(e =>
+            {
+                e.EncryptedId = _protector.Protect(e.Id.ToString());
+                return e;
+            });
             return View(model);
         }
 
@@ -43,8 +54,9 @@ namespace EmployeeManagementWebApp.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         //[Route("[action]/{id?}")]   
+        //public ViewResult Details(int? id)
         [AllowAnonymous]
-        public ViewResult Details(int? id)
+        public ViewResult Details(string id)
         {
             //throw new Exception();
 
@@ -55,12 +67,14 @@ namespace EmployeeManagementWebApp.Controllers
             //_logger.LogError("LogError");
             //_logger.LogCritical("LogCritical");
 
+            int? decryptedEmployeeId = Convert.ToInt32(_protector.Unprotect(id));
 
-            Employee employee = _employeeRepository.GetEmployee(id ?? 1);
+            Employee employee = _employeeRepository.GetEmployee(decryptedEmployeeId ?? 1);
+            employee.EncryptedId = id;
             if (employee == null)
             {
                 Response.StatusCode = 404;
-                return View("EmployeeNotFound", id.Value);
+                return View("EmployeeNotFound", id);
             }
 
             HomeDetailsViewModel homeDetailsViewModel = new HomeDetailsViewModel()
@@ -109,16 +123,21 @@ namespace EmployeeManagementWebApp.Controllers
                     PhotoPath = uniqueFileName
                 };
                 Employee newEmployee = _employeeRepository.Add(employee);
-                return RedirectToAction("details", new { id = newEmployee.Id });
+                newEmployee.EncryptedId = _protector.Protect(employee.Id.ToString());
+                return RedirectToAction("details", new { id = newEmployee.EncryptedId });
             }
             return View();
         }
 
         [HttpGet]
         //[Authorize]
-        public ViewResult Edit(int id)
+        public ViewResult Edit(string id)
         {
-            Employee employee = _employeeRepository.GetEmployee(id);
+
+            int decryptedEmployeeId = Convert.ToInt32(_protector.Unprotect(id));
+
+            Employee employee = _employeeRepository.GetEmployee(decryptedEmployeeId);
+            //Employee employee = _employeeRepository.GetEmployee(id);
             EmployeeEditViewModel employeeEditViewModel = new EmployeeEditViewModel
             {
                 Id = employee.Id,
@@ -204,7 +223,7 @@ namespace EmployeeManagementWebApp.Controllers
             {
                 if (!string.IsNullOrEmpty(employee.PhotoPath))
                     System.IO.File.Delete(Path.Combine(_webHostingEnvironment.WebRootPath, "images", employee.PhotoPath));
-                
+
                 _employeeRepository.Delete(id);
                 return RedirectToAction("index", "home");
             }

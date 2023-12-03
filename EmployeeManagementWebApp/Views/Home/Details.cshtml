@@ -30,7 +30,7 @@
                 </span>
                 <span id="deleteSpan_@Model.Employee.Id">
                     <a asp-controller="home" asp-action="index" class="btn btn-primary">Back</a>
-                    <a asp-controller="home" asp-action="edit" class="btn btn-primary">Edit</a>
+                    <a asp-controller="home" asp-action="edit" asp-route-id="@Model.Employee.EncryptedId" class="btn btn-primary">Edit</a>
                     @*<a asp-controller="home" asp-action="delete" asp-route-id="@Model.Employee.Id" class="btn btn-danger">Delete</a>*@
                     <a class="btn btn-danger" onclick="confirmDelete('@Model.Employee.Id', true)">Delete</a>
                 </span>

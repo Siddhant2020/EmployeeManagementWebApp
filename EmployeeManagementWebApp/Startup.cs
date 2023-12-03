@@ -109,6 +109,7 @@ namespace EmployeeManagementWebApp
             services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
             services.AddSingleton<IAuthorizationHandler, CanEditOnlyOtherAdminRolesAndClaimsHandler>();
             services.AddSingleton<IAuthorizationHandler, SuperAdminHandler>();
+            services.AddSingleton<DataProtectionPurposeStrings>();
             //services.AddRazorPages();
             //MvcOptions options = new MvcOptions();
             //options.EnableEndpointRouting = false;
@@ -157,7 +158,8 @@ namespace EmployeeManagementWebApp
             //app.UseMvcWithDefaultRoute(); //this sets up the default conventional routing
             app.UseMvc(routeBuilder =>
             {
-                routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                //routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}");
             });
             //app.UseMvc();
 
