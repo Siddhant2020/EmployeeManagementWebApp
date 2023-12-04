@@ -141,7 +141,12 @@ namespace EmployeeManagementWebApp.Controllers
                     return View(loginViewModel);
                 }
 
-                var result = await _signInManager.PasswordSignInAsync(loginViewModel.Email, loginViewModel.Password, loginViewModel.RememberMe, false);
+                // The last boolean parameter lockoutOnFailure indicates if the account should be locked on failed logon attempt. On every failed logon
+                // attempt AccessFailedCount column value in AspNetUsers table is incremented by 1. When the AccessFailedCount reaches the configured
+                // MaxFailedAccessAttempts which in our case is 5, the account will be locked and LockoutEnd column is populated. After the account is
+                // lockedout, even if we provide the correct username and password, PasswordSignInAsync() method returns Lockedout result and the login
+                // will not be allowed for the duration the account is locked.
+                var result = await _signInManager.PasswordSignInAsync(loginViewModel.Email, loginViewModel.Password, loginViewModel.RememberMe, true);
 
                 if (result.Succeeded)
                 {
@@ -153,6 +158,11 @@ namespace EmployeeManagementWebApp.Controllers
                     {
                         return RedirectToAction("index", "home");
                     }
+                }
+
+                if (result.IsLockedOut)
+                {
+                    return View("AccountLocked");
                 }
 
                 ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
@@ -410,6 +420,10 @@ namespace EmployeeManagementWebApp.Controllers
                     var result = await _userManger.ResetPasswordAsync(user, resetPasswordViewModel.Token, resetPasswordViewModel.Password);
                     if (result.Succeeded)
                     {
+                        if (await _userManger.IsLockedOutAsync(user))
+                        {
+                            await _userManger.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow);
+                        }
                         return View("ResetPasswordConfirmation");
                     }
                     foreach (var error in result.Errors)
