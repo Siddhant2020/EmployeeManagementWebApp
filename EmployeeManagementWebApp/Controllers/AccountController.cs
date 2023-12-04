@@ -28,8 +28,54 @@ namespace EmployeeManagementWebApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult ChangePassword()
+        public async Task<IActionResult> AddPassword()
         {
+            var user = await _userManger.GetUserAsync(User);
+
+            var userHasPassword = await _userManger.HasPasswordAsync(user);
+
+            if (userHasPassword)
+            {
+                return RedirectToAction("ChangePassword");
+            }
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddPassword(AddPasswordViewModel addPasswordViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManger.GetUserAsync(User);
+                var result = await _userManger.AddPasswordAsync(user, addPasswordViewModel.NewPassword);
+
+                if (!result.Succeeded)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                    return View();
+                }
+                await _signInManager.RefreshSignInAsync(user);
+                return View("AddPasswordConfirmation");
+            }
+            return View(addPasswordViewModel);
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ChangePassword()
+        {
+            var user = await _userManger.GetUserAsync(User);
+
+            var userHasPassword = await _userManger.HasPasswordAsync(user);
+
+            if (!userHasPassword)
+            {
+                return RedirectToAction("AddPassword");
+            }
+            
             return View();
         }
 
